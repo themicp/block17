@@ -1,9 +1,13 @@
+const json = require('koa-json');
 const route = require('koa-route');
 const logger = require('koa-logger');
 const koa = require('koa');
 const app = module.exports = new koa();
 
+const config = require('./config.json');
+
 app.use(logger());
+app.use(json());
 
 app.use(route.get('/tx', (ctx) => {
     ctx.throw(501);
@@ -14,7 +18,7 @@ app.use(route.put('/tx', (ctx) => {
 }));
 
 app.use(route.get('/bank', (ctx) => {
-    ctx.throw(501);
+    ctx.body = config.bank;
 }));
 
 app.use(route.get('/account', (ctx) => {

@@ -4,5 +4,9 @@
         "user": "root",
         "pass": "",
         "name": "b17"
+    },
+    "bank": {
+        "name": "Sample bank",
+        "logo": "https://image.freepik.com/free-icon/spinner-circle_318-40730.jpg"
     }
 }
