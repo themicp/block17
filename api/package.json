@@ -1,0 +1,25 @@
+{
+  "name": "block17-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themicp/block17.git"
+  },
+  "author": "block17 Development Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/themicp/block17/issues"
+  },
+  "homepage": "https://github.com/themicp/block17#readme",
+  "dependencies": {
+    "koa": "^2.2.0",
+    "koa-logger": "^2.0.1",
+    "koa-route": "^3.2.0"
+  }
+}
