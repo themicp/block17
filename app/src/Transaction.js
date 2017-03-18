@@ -5,47 +5,109 @@ import {fetch} from './utils/api';
 import TextField from 'material-ui/TextField';
 import {Card, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import {Link} from 'react-router';
+import AppBar from 'material-ui/AppBar';
+import {FormattedNumber} from 'react-intl';
+import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
+import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
+import $ from 'jquery';
 
 export default class Transaction extends Component {
     constructor(props) {
         super(props);
-        this.state = {contact: {}};
+        this.state = {contact: {}, open: false, message: ''};
     }
+
+    static contextTypes = {
+        router: React.PropTypes.object.isRequired,
+    };
 
     componentWillMount() {
         fetch('/contact/' + this.props.params.account).then(contact => {
-            console.log(contact);
             this.setState({contact});
+        });
+    }
+
+    sendMoney = () => {
+        const amount = this.refs.amount.input.value;
+        const description = this.refs.description.input.value;
+
+        $.ajax({
+            url: '/tx',
+            method: 'PUT',
+            data: {
+                amount,
+                description,
+                counterparty: this.props.params.account
+            },
+            success: (data, err) => {
+		        this.setState({open: true, message: 'Money sent. Redirecting..'});	
+
+                setTimeout(() => {
+                    this.context.router.push('/'); 
+                }, 3000);
+            },
+            error: () => {
+		        this.setState({open: true, message: 'There was an error creating the transaction.'});	
+            }
         });
     }
 
     render() {
         return (
-            <section className='main'>
-                {this.state.contact.name ?
-                <div>
-                    <Card>
-                        <CardTitle>Sending money to</CardTitle>
-                        <CardText>
-                            <Avatar src={this.state.contact.avatar} />
-                            <span className='rec-name'>{this.state.contact.name}</span>
-                            <span className='rec-account'>{this.state.contact.iban}</span>
-                        </CardText>
-                    </Card>
+            <div>
+                <AppBar
+                    title='Amount'
+                    style={{textAlign: 'left', marginBottom: '20px'}}
+                    iconElementLeft={<Link to='/contacts'><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
+                />
+                <section className='main'>
+                    {this.state.contact.name ?
+                    <div>
+                        <Card>
+                            <CardTitle>Sending money to</CardTitle>
+                            <CardText>
+                                <Avatar src={this.state.contact.avatar} />
+                                <span className='rec-name'>{this.state.contact.name}</span>
+                                <span className='rec-account'>{this.state.contact.iban}</span>
+                            </CardText>
+                        </Card>
 
-                    <TextField
-                        hintText='EUR'
-                        floatingLabelText='Amount to send'
-                        floatingLabelFixed={true}
-                        fullWidth={true}
-                        type='number'
-                        style={{marginTop: 20}}
-                    />
+                        <Card>
+                            <CardTitle style={{fontWeight: 'bold'}}>Balance: <FormattedNumber value={this.props.account.balance} style='currency' currency='EUR' /></CardTitle>
+                        </Card>
 
-                    <RaisedButton label='Send' primary={true} fullWidth={true} />
-                </div>
-                : ''}
-            </section>
+                        <TextField
+                            ref='description'
+                            floatingLabelText='Description'
+                            floatingLabelFixed={true}
+                            fullWidth={true}
+                            style={{marginTop: 20}}
+                        />
+
+                        <TextField
+                            hintText='EUR'
+                            ref='amount'
+                            floatingLabelText='Amount to send'
+                            floatingLabelFixed={true}
+                            fullWidth={true}
+                            type='number'
+                            style={{fontSize: '20px', height: '82px'}}
+                        />
+
+                        <RaisedButton label='Send' primary={true} fullWidth={true} onClick={this.sendMoney} />
+
+						<Snackbar
+						  open={this.state.open}
+						  message={this.state.message}
+						  autoHideDuration={4000}
+						  onRequestClose={this.handleRequestClose}
+						/>
+                    </div>
+                    : ''}
+                </section>
+            </div>
         );
     }
 }

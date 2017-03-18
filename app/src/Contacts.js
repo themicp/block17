@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import Subheader from 'material-ui/Subheader';
+import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
+import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
 import {fetch} from './utils/api';
 import {Link} from 'react-router';
+import AppBar from 'material-ui/AppBar';
 
 export default class Contacts extends Component {
     constructor(props) {
@@ -35,12 +38,19 @@ export default class Contacts extends Component {
         }
 
         return (
-            <section className='main'>
-                <List>
-                    <Subheader>Saved Contacts</Subheader>
-                    {listItems}
-                </List>
-            </section>
+            <div>
+                <AppBar
+                    title='Send Money'
+                    style={{textAlign: 'left'}}
+                    iconElementLeft={<Link to='/'><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
+                />
+                <section className='main'>
+                    <List>
+                        <TextField hintText='Search' fullWidth={true} />
+                        {listItems}
+                    </List>
+                </section>
+            </div>
         );
     }
 }
