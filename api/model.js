@@ -1,5 +1,5 @@
 const mysql = require('mysql2/promise');
-const config = require('./config.json');
+const config = require('./config');
 
 const getConnection = async () => {
     return mysql.createPool({
@@ -16,7 +16,7 @@ const getBankDetails = async (conn, name) => {
 };
 
 const getTransactions = async (conn, party) => {
-    let [rows, _] = await conn.execute('select * from ((select `id`, `sender` as `counterparty`, `amount`, `description`, `timestamp` from `transactions` where `recipient` = ?) union (select `id`, `recipient` as `counterparty`, -`amount` as `amount`, `description`, `timestamp` from `transactions` where `sender` = ?)) `TX` join `parties` on `TX`.`counterparty` = `parties`.`iban`', [party, party]);
+    let [rows, _] = await conn.execute('select * from ((select `id`, `sender` as `counterparty`, `amount`, `description`, `timestamp` from `transactions` where `recipient` = ?) union (select `id`, `recipient` as `counterparty`, -`amount` as `amount`, `description`, `timestamp` from `transactions` where `sender` = ?)) `TX` join `parties` on `TX`.`counterparty` = `parties`.`iban` order by `timestamp` desc', [party, party]);
     return rows;
 };
 
