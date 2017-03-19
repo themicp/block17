@@ -9,7 +9,7 @@ const app = module.exports = new koa();
 const config = require('./config');
 const model = require('./model');
 
-app.use(logger());
+//app.use(logger());
 app.use(json());
 app.use(bodyparser());
 app.use(cors());
@@ -34,7 +34,6 @@ app.use(route.get('/tx', async (ctx) => {
 app.use(route.put('/tx', async (ctx) => {
     const r = ctx.request.body;
     const required_params = new Set(['counterparty', 'description', 'amount']);
-    console.log(Object.keys(r));
 
     if (Object.keys(r).filter((key) => required_params.has(key)).length != required_params.size) {
         ctx.body = {error: 1};
@@ -77,6 +76,9 @@ app.use(route.get('/contact/:iban', async (ctx, iban) => {
 
 const run = async () => {
     conn = await model.getConnection();
+    console.log(`Advertising our pubaddr ${config.bank.pubaddr}...`);
+    await model.advertiseMyPubAddr(conn);
+
     console.log(`Listening on port ${config.port}.`);
     app.listen(parseInt(config.port));
 
