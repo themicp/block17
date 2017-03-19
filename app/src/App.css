@@ -104,6 +104,6 @@ a {
     font-size: 13px;
 }
 
-.list > div:nth-child(even) {
+.list > div:nth-child(even), .list > a:nth-child(even) div {
     background: #eee;
 }

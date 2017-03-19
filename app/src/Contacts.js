@@ -45,7 +45,7 @@ export default class Contacts extends Component {
                     iconElementLeft={<Link to={'/' + this.props.params.bank}><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
                 />
                 <section className='main'>
-                    <List>
+                    <List className='list'>
                         <TextField hintText='Search' fullWidth={true} />
                         {listItems}
                     </List>
