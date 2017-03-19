@@ -24,9 +24,13 @@ export default class Home extends Component {
         });
     }
 
+    componentWillUnmount() {
+        clearInterval(this.updateInterval);
+    }
+
     componentWillMount() {
         this.fetchData();
-        setInterval(this.fetchData, 1000);
+        this.updateInterval = setInterval(this.fetchData, 1000);
     }
 
     render() {

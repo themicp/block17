@@ -27,14 +27,13 @@ export default class Transaction extends Component {
         fetch('/contact/' + this.props.params.account, this.props.params.bank).then(contact => {
             this.setState({contact});
         });
-        const url = getEndpoint(this.props.params.bank);
     }
 
     sendMoney = () => {
         const amount = this.refs.amount.input.value;
         const description = this.refs.description.input.value;
 
-        if (amount == 0) {
+        if (!amount) {
             this.setState({open: true, message: 'Invalid amount.'});
             return;
         }

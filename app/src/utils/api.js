@@ -1,8 +1,7 @@
-import http from 'http';
 import $ from 'jquery';
 
 const getEndpoint = (bank) => {
-    return bank == 'eurobank' ? 'http://arctan.gtklocker.com:4242' : 'http://arctan.gtklocker.com:4252'
+    return bank === 'eurobank' ? 'http://arctan.gtklocker.com:4242' : 'http://arctan.gtklocker.com:4252'
 }
 
 const fetch = (url, bank) => {
