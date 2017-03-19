@@ -6,7 +6,7 @@ const bodyparser = require('koa-bodyparser');
 const koa = require('koa');
 const app = module.exports = new koa();
 
-const config = require('./config.json');
+const config = require('./config');
 const model = require('./model');
 
 app.use(logger());
@@ -77,7 +77,8 @@ app.use(route.get('/contact/:iban', async (ctx, iban) => {
 
 const run = async () => {
     conn = await model.getConnection();
-    app.listen(3000);
+    console.log(`Listening on port ${config.port}.`);
+    app.listen(parseInt(config.port));
 
     //await model.getTransactions(conn, 'GR8802603040000660101220642');
     //console.log(await model.getBalance(conn, 'GR8802603040000660101220642'));
