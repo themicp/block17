@@ -1,0 +1,1 @@
+pybitcointools==1.1.15
