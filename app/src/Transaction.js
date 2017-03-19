@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Avatar from 'material-ui/Avatar';
-import {fetch} from './utils/api';
+import {getEndpoint, fetch} from './utils/api';
 import TextField from 'material-ui/TextField';
 import {Card, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -24,17 +24,19 @@ export default class Transaction extends Component {
     };
 
     componentWillMount() {
-        fetch('/contact/' + this.props.params.account).then(contact => {
+        fetch('/contact/' + this.props.params.account, this.props.params.bank).then(contact => {
             this.setState({contact});
         });
+        const url = getEndpoint(this.props.params.bank);
     }
 
     sendMoney = () => {
         const amount = this.refs.amount.input.value;
         const description = this.refs.description.input.value;
 
+        const url = getEndpoint(this.props.params.bank);
         $.ajax({
-            url: 'http://arctan.gtklocker.com:3000/tx',
+            url,
             method: 'PUT',
             data: {
                 amount: amount * 100,
@@ -45,7 +47,7 @@ export default class Transaction extends Component {
 		        this.setState({open: true, message: 'Money sent. Redirecting..'});	
 
                 setTimeout(() => {
-                    this.context.router.push('/'); 
+                    this.context.router.push('/' + this.props.params.bank + '/'); 
                 }, 3000);
             },
             error: () => {
@@ -60,7 +62,7 @@ export default class Transaction extends Component {
                 <AppBar
                     title='Amount'
                     style={{textAlign: 'left', marginBottom: '20px'}}
-                    iconElementLeft={<Link to='/contacts'><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
+                    iconElementLeft={<Link to={this.props.params.bank + '/contacts'}><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
                 />
                 <section className='main'>
                     {this.state.contact.name ?

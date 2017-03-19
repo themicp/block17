@@ -17,7 +17,7 @@ export default class Home extends Component {
     }
 
     componentWillMount() {
-        fetch('/tx').then(transactions => {;
+        fetch('/tx', this.props.params.bank).then(transactions => {;
             this.setState({transactions});
         }).catch(err => {
             console.log(err);
@@ -33,8 +33,11 @@ export default class Home extends Component {
                         key={item.id}
                         leftAvatar={<Avatar src={item.counterparty.avatar} />}
                         primaryText={item.description}
+                        style={{textAlign: 'left'}}
                         secondaryText={<span className='date'><FormattedDate
 												value={item.date}
+                                                hour='2-digit'
+                                                minute='2-digit'
 												day="numeric"
 												month="long"
 												year="numeric" /></span>}
@@ -54,7 +57,6 @@ export default class Home extends Component {
             fontWeight: 'bold'
         };
 
-        console.log(this.props.account);
         return (
             <section className='main'>
                 {this.props.bank && this.props.account ? 
@@ -79,7 +81,7 @@ export default class Home extends Component {
                         {listItems}
                     </List>
                 : ''}
-                <Link className='new-transaction' to='/contacts'>
+                <Link className='new-transaction' to={this.props.params.bank + '/contacts'}>
                     <FloatingActionButton>
                         <SwapIcon />
                     </FloatingActionButton>

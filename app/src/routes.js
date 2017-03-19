@@ -6,9 +6,9 @@ import Contacts from './Contacts';
 import { Route, IndexRoute } from 'react-router';
 
 export default (
-    <Route path='/' component={App}>
+    <Route path='/:bank' component={App}>
         <IndexRoute component={Home} />
-        <Route path='/transaction/:account' component={Transaction} />
-        <Route path='/contacts' component={Contacts} />
+        <Route path='/:bank/transaction/:account' component={Transaction} />
+        <Route path='/:bank/contacts' component={Contacts} />
     </Route>
 );

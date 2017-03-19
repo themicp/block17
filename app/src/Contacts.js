@@ -16,7 +16,7 @@ export default class Contacts extends Component {
     }
 
     componentWillMount() {
-        fetch('/contacts').then(contacts => {
+        fetch('/contacts', this.props.params.bank).then(contacts => {
             this.setState({contacts});
         });
     }
@@ -28,7 +28,7 @@ export default class Contacts extends Component {
             let i = 0;
             this.state.contacts.forEach(contact => {
                 listItems.push(
-                    <Link key={i++} to={'/transaction/' + contact.iban}><ListItem
+                    <Link key={i++} to={'/' + this.props.params.bank + '/transaction/' + contact.iban}><ListItem
                         leftAvatar={<Avatar src={contact.avatar} />}
                         primaryText={contact.name}
                         secondaryText={contact.iban}
@@ -42,7 +42,7 @@ export default class Contacts extends Component {
                 <AppBar
                     title='Send Money'
                     style={{textAlign: 'left'}}
-                    iconElementLeft={<Link to='/'><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
+                    iconElementLeft={<Link to={'/' + this.props.params.bank}><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
                 />
                 <section className='main'>
                     <List>

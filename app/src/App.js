@@ -13,8 +13,8 @@ class App extends Component {
     }
 
     fetchData = () => {
-        const accountPromise = fetch('/account');
-        const bankPromise = fetch('/bank');
+        const accountPromise = fetch('/account', this.props.params.bank);
+        const bankPromise = fetch('/bank', this.props.params.bank);
 
         Promise.all([accountPromise, bankPromise]).then(data => {
             this.setState({
@@ -47,7 +47,7 @@ class App extends Component {
                 {this.state.bank && this.state.account ? 
                 <header>
                     <div className='logo'>
-                        <Link to='/'>
+                        <Link to={'/' + this.props.params.bank}>
                             <img src={this.state.bank.logo} alt='bank-logo'/>
                         </Link>
                     </div>
