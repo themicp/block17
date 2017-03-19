@@ -1,3 +1,4 @@
+const cors = require('kcors');
 const json = require('koa-json');
 const route = require('koa-route');
 const logger = require('koa-logger');
@@ -11,11 +12,23 @@ const model = require('./model');
 app.use(logger());
 app.use(json());
 app.use(bodyparser());
+app.use(cors());
 
 let conn;
 
 app.use(route.get('/tx', async (ctx) => {
-    ctx.body = await model.getTransactions(conn, config.account.iban);
+    const txs = await model.getTransactions(conn, config.account.iban);
+	ctx.body = txs.map((tx) => ({
+		id: tx.id,
+		date: tx.timestamp,
+		amount: tx.amount,
+		counterparty: {
+			fullname: tx.name,
+			avatar: tx.avatar,
+			iban: tx.counterparty
+		},
+		description: tx.description
+	}));
 }));
 
 app.use(route.put('/tx', async (ctx) => {
@@ -44,11 +57,22 @@ app.use(route.get('/bank', (ctx) => {
 }));
 
 app.use(route.get('/account', async (ctx) => {
-    ctx.body = await model.getMyAccount(conn);
+    const account = await model.getMyAccount(conn);
+    const balance = await model.getBalance(conn, config.account.iban);
+    ctx.body = {
+        fullname: account.name,
+        account: account.iban,
+        avatar: account.avatar,
+        balance: balance
+    };
 }));
 
 app.use(route.get('/contacts', async (ctx) => {
-    ctx.body = await model.getContacts(conn);
+    ctx.body = await model.getMyContacts(conn);
+}));
+
+app.use(route.get('/contact/:iban', async (ctx, iban) => {
+    ctx.body = await model.getContact(conn, iban);
 }));
 
 const run = async () => {

@@ -16,7 +16,7 @@ const getBankDetails = async (conn, name) => {
 };
 
 const getTransactions = async (conn, party) => {
-    let [rows, _] = await conn.execute('select `id`, `timestamp`, `sender`, `recipient`, `description`, -`amount` as `amount` from `transactions` where `sender` = ? union select `id`, `timestamp`, `sender`, `recipient`, `description`, `amount` from `transactions` where `recipient` = ?', [party, party]);
+    let [rows, _] = await conn.execute('select * from ((select `id`, `sender` as `counterparty`, `amount`, `description`, `timestamp` from `transactions` where `recipient` = ?) union (select `id`, `recipient` as `counterparty`, -`amount` as `amount`, `description`, `timestamp` from `transactions` where `sender` = ?)) `TX` join `parties` on `TX`.`counterparty` = `parties`.`iban`', [party, party]);
     return rows;
 };
 
@@ -27,19 +27,27 @@ const getBalance = async (conn, party) => {
     }, 0);
 };
 
-const getContacts = async (conn) => {
-    let [rows, _] = await conn.execute('select * from `parties`');
+const getMyContacts = async (conn) => {
+    let [rows, _] = await conn.execute('select * from `parties` where `iban` <> ?', [config.account.iban]);
     return rows;
 };
 
 const getMyAccount = async (conn) => {
-    console.log(config.account.iban);
-    let [rows, _] = await conn.execute('select * from `parties` where `iban` like ?', [`%${config.account.iban}%`]);
-    return rows;
+    return getContact(conn, config.account.iban);
 };
 
 const putTransaction = async (conn, counterparty, description, amount) => {
     await conn.execute('insert into `transactions` (`sender`, `recipient`, `description`, `amount`) values (?, ?, ?, ?)', [config.account.iban, counterparty, description, amount]);
+};
+
+const getContact = async (conn, iban) => {
+    let [rows, _] = await conn.execute('select * from `parties` where `iban` like ?', [`%${iban}%`]);
+	if (rows.length == 1) {
+		return rows[0];
+	}
+	else {
+		return rows;
+	}
 };
 
 const run = async () => {
@@ -58,7 +66,8 @@ module.exports = {
     getBankDetails,
     getTransactions,
     getBalance,
-    getContacts,
+    getMyContacts,
     getMyAccount,
-    putTransaction
+    putTransaction,
+    getContact
 };

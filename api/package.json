@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/themicp/block17#readme",
   "dependencies": {
+    "kcors": "^1.3.2",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.1.0",
     "koa-json": "^2.0.2",
