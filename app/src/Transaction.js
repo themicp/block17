@@ -66,7 +66,7 @@ export default class Transaction extends Component {
                 <AppBar
                     title='Amount'
                     style={{textAlign: 'left', marginBottom: '20px'}}
-                    iconElementLeft={<Link to={this.props.params.bank + '/contacts'}><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
+                    iconElementLeft={<Link to={'/' + this.props.params.bank + '/contacts'}><IconButton><NavigationBack color='#fff' /></IconButton></Link>}
                 />
                 <section className='main'>
                     {this.state.contact.name ?
