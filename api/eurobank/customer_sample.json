@@ -1,0 +1,55 @@
+{
+  "id": "48433730",
+  "messages_count": 42,
+  "authentication": {
+    "username": "gtklocker",
+    "password": "thisguy"
+  },
+  "info": {
+    "first_name": "Kostis",
+    "last_name": "Karantias",
+    "email_addresses": [
+      "karantiaskostis@gmail.com"
+    ],
+    "mobile_numbers": [
+      "6980223311"
+    ]
+  },
+  "products": [
+    {
+      "type": "account",
+      "contract_number": "00260000010000010034310",
+      "balance": 2950.0,
+      "available_balance": 2950.0,
+      "currency": "EUR",
+      "alias": "gtklocker's account",
+      "transactions": [
+        {
+          "transaction_date": "2017-02-24",
+          "value_date": "2017-02-24",
+          "description": "Enter the Hackathon",
+          "amount": 50.0,
+          "new_balance": 2950.0
+        }
+      ]
+    },
+    {
+      "type": "card",
+      "contract_number": "4792000068910342",
+      "balance": 2950.0,
+      "available_balance": 2950.0,
+      "currency": "EUR",
+      "alias": "gtklocker's card",
+      "transactions": [
+        {
+          "transaction_date": "2017-02-24",
+          "value_date": "2017-02-24",
+          "description": "Electronic equipment",
+          "amount": 50.0,
+          "new_balance": 2950.0,
+          "mcc": "3345"
+        }
+      ]
+    }
+  ]
+}
