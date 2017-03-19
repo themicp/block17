@@ -7,7 +7,9 @@
     },
     "bank": {
         "name": "Sample bank",
-        "logo": "https://image.freepik.com/free-icon/spinner-circle_318-40730.jpg"
+        "logo": "https://image.freepik.com/free-icon/spinner-circle_318-40730.jpg",
+        "pubaddr": "",
+        "privkey": ""
     },
     "account": {
         "iban": "GR0000000000000000000000001"

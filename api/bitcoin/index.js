@@ -7,7 +7,9 @@ var BEYONDBANK_PRIV = 'beyond-hackathon-wallet-1812378912309812-beyondbank';
 
 function sendCoins(privKey, toAddress, eurocentAmount) {
     return new Promise((resolve, reject) => {
-        exec('python block17.py --amount ' + eurocentAmount + ' --privbrain ' + privKey + ' --dest ' + toAddress, {}, (err, stdout, stderr) => {
+        exec('python2 block17.py --amount ' + eurocentAmount + ' --privbrain ' + privKey + ' --dest ' + toAddress, {
+            cwd: __dirname
+        }, (err, stdout, stderr) => {
             if (err) {
                 reject(stderr);
                 return;

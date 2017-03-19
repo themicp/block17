@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const config = require('./config');
+const bitcoin = require('./bitcoin');
 
 const getConnection = async () => {
     return mysql.createPool({
@@ -38,16 +39,46 @@ const getMyAccount = async (conn) => {
 
 const putTransaction = async (conn, counterparty, description, amount) => {
     await conn.execute('insert into `transactions` (`sender`, `recipient`, `description`, `amount`) values (?, ?, ?, ?)', [config.account.iban, counterparty, description, amount]);
+    
+    const countercontact = await getContact(conn, counterparty);
+    if (countercontact === null) {
+        // stop
+    }
+    else {
+        const counterbank = countercontact.bank;
+        if (counterbank != config.bank.name) {
+            console.log(`Sending clearance funds to ${counterbank}...`);
+            const pubaddr = await getBankPubaddr(conn, counterbank);
+            console.log(`Found blockchain address ${pubaddr}.`);
+
+            console.log(`Sending...`);
+            bitcoin.sendCoins(config.bank.privkey, pubaddr, 110).then((out) => {
+                console.log('Transaction completed. Details:');
+                console.log(out);
+            }).catch((e) => {
+                console.error('Transaction failed with error', e);
+            });
+        }
+    }
+};
+
+const getBankPubaddr = async (conn, bank) => {
+    let [rows, _] = await conn.execute('select btcaddr from `banks` where `name` = ?', [bank]);
+    return rows[0].btcaddr;
 };
 
 const getContact = async (conn, iban) => {
     let [rows, _] = await conn.execute('select * from `parties` where `iban` like ?', [`%${iban}%`]);
-	if (rows.length == 1) {
+	if (rows.length >= 1) {
 		return rows[0];
 	}
 	else {
-		return rows;
+		return null;
 	}
+};
+
+const advertiseMyPubAddr = async (conn, bank) => {
+    await conn.execute('update `banks` set `btcaddr` = ? where `name` = ?', [config.bank.pubaddr, config.bank.name]);
 };
 
 const run = async () => {
@@ -55,6 +86,7 @@ const run = async () => {
     await getTransactions(conn, 'GR8802603040000660101220642');
     console.log(await getBalance(conn, 'GR8802603040000660101220642'));
     console.log(await getMyAccount(conn));
+    console.log(await getBankPubaddr(conn, 'Beyondbank'));
 };
 
 if (!module.parent) {
@@ -69,5 +101,6 @@ module.exports = {
     getMyContacts,
     getMyAccount,
     putTransaction,
-    getContact
+    getContact,
+    advertiseMyPubAddr
 };
