@@ -1,8 +1,11 @@
 import http from 'http';
+import $ from 'jquery';
 
 const fetch = url => {
     return new Promise((resolve, reject) => {
-        http.get('/test', res => {
+        $.get('http://arctan.gtklocker.com:3000' + url).done(res => {
+            resolve(res);
+            /*
             if (url === '/account') {
                 const account = {
                     fullname: 'Themis Papameletiou',
@@ -153,7 +156,8 @@ const fetch = url => {
                 console.log('request to', url);
                 resolve({});
             }
-        }, err => {
+            */
+        }).fail(err => {
             console.log(err);
             reject(err);
         });

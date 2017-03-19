@@ -30,7 +30,7 @@ export default class Home extends Component {
             this.state.transactions.forEach(item => {
                 listItems.push(
                     <ListItem
-                        key={item.key}
+                        key={item.id}
                         leftAvatar={<Avatar src={item.counterparty.avatar} />}
                         primaryText={item.description}
                         secondaryText={<span className='date'><FormattedDate
@@ -40,8 +40,8 @@ export default class Home extends Component {
 												year="numeric" /></span>}
 
                         rightToggle={
-                            <span className={(item.amount < 0 ? 'red' : 'green')}>
-                                <FormattedNumber value={item.amount} style='currency' currency='EUR' />
+                            <span className={'amount ' + (item.amount < 0 ? 'red' : 'green')}>
+                                <FormattedNumber value={item.amount/100} style='currency' currency='EUR' />
                             </span>
                         }	
                     />
@@ -68,7 +68,7 @@ export default class Home extends Component {
                     <Card>
                         <CardTitle>Balance</CardTitle>
                         <CardText style={balanceStyle}>
-                            <FormattedNumber value={this.props.account.balance} style='currency' currency='EUR' />
+                            <FormattedNumber value={this.props.account.balance/100} style='currency' currency='EUR' />
                         </CardText>
                     </Card>
                 </div>

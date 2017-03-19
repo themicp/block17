@@ -12,7 +12,7 @@ class App extends Component {
         this.state = {};
     }
 
-    componentWillMount() {
+    fetchData = () => {
         const accountPromise = fetch('/account');
         const bankPromise = fetch('/bank');
 
@@ -24,6 +24,11 @@ class App extends Component {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    componentWillMount() {
+        this.fetchData();
+        setInterval(this.fetchData, 1000);
     }
 
 

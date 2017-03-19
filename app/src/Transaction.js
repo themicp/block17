@@ -34,10 +34,10 @@ export default class Transaction extends Component {
         const description = this.refs.description.input.value;
 
         $.ajax({
-            url: '/tx',
+            url: 'http://arctan.gtklocker.com:3000/tx',
             method: 'PUT',
             data: {
-                amount,
+                amount: amount * 100,
                 description,
                 counterparty: this.props.params.account
             },
@@ -75,7 +75,7 @@ export default class Transaction extends Component {
                         </Card>
 
                         <Card>
-                            <CardTitle style={{fontWeight: 'bold'}}>Balance: <FormattedNumber value={this.props.account.balance} style='currency' currency='EUR' /></CardTitle>
+                            <CardTitle style={{fontWeight: 'bold'}}>Balance: <FormattedNumber value={this.props.account.balance/100} style='currency' currency='EUR' /></CardTitle>
                         </Card>
 
                         <TextField
