@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {fetch} from './utils/api';
-import {Link} from 'react-router';
 
 injectTapEventPlugin();
 
@@ -44,15 +43,6 @@ class App extends Component {
 
         return (
             <div className="App">
-                {this.state.bank && this.state.account ? 
-                <header>
-                    <div className='logo'>
-                        <Link to={'/' + this.props.params.bank}>
-                            <img src={this.state.bank.logo} alt='bank-logo'/>
-                        </Link>
-                    </div>
-                </header>
-                : ''}
                 {childrenWithProps}
             </div>
         );

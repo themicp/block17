@@ -70,6 +70,13 @@ export default class Home extends Component {
             <section className='main'>
                 {this.props.bank && this.props.account ? 
                 <div>
+                    <header>
+                        <div className='logo'>
+                            <Link to={'/' + this.props.params.bank}>
+                                <img src={this.props.bank.logo} alt='bank-logo'/>
+                            </Link>
+                        </div>
+                    </header>
                     <div className='user-details'>
                         <Avatar src={this.props.account.avatar} />
                         <span className='name'>{this.props.account.fullname}</span>
