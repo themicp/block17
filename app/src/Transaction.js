@@ -34,7 +34,12 @@ export default class Transaction extends Component {
         const amount = this.refs.amount.input.value;
         const description = this.refs.description.input.value;
 
-        const url = getEndpoint(this.props.params.bank);
+        if (amount == 0) {
+            this.setState({open: true, message: 'Invalid amount.'});
+            return;
+        }
+
+        const url = getEndpoint(this.props.params.bank) + '/tx';
         $.ajax({
             url,
             method: 'PUT',
@@ -44,7 +49,7 @@ export default class Transaction extends Component {
                 counterparty: this.props.params.account
             },
             success: (data, err) => {
-		        this.setState({open: true, message: 'Money sent. Redirecting..'});	
+		        this.setState({open: true, message: 'Money sent.'});	
 
                 setTimeout(() => {
                     this.context.router.push('/' + this.props.params.bank + '/'); 

@@ -16,12 +16,17 @@ export default class Home extends Component {
         this.state = {};
     }
 
-    componentWillMount() {
+    fetchData = () => {
         fetch('/tx', this.props.params.bank).then(transactions => {;
             this.setState({transactions});
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    componentWillMount() {
+        this.fetchData();
+        setInterval(this.fetchData, 1000);
     }
 
     render() {
