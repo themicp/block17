@@ -103,3 +103,7 @@ a {
 .amount {
     font-size: 13px;
 }
+
+.list > div:nth-child(even) {
+    background: #eee;
+}

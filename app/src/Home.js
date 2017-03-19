@@ -85,7 +85,7 @@ export default class Home extends Component {
                 </div>
                 : ''}
                 {this.state.transactions ? 
-                    <List>
+                    <List className='list'>
                         <Subheader>Transactions</Subheader>
                         {listItems}
                     </List>
