@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const config = require('./config.json');
 
 const getConnection = async () => {
-    return mysql.createConnection({
+    return mysql.createPool({
         host: config.db.host,
         user: config.db.user,
         pass: config.db.pass,
