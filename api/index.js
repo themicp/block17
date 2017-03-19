@@ -6,7 +6,7 @@ const bodyparser = require('koa-bodyparser');
 const koa = require('koa');
 const app = module.exports = new koa();
 
-const config = require('./config.json');
+const config = require('./config');
 const model = require('./model');
 
 app.use(logger());
